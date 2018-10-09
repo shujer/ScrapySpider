@@ -1,0 +1,13 @@
+{
+  "spider" : "wanfang",
+  "website" : "万方数据",
+  "type": "论文/期刊/会议",
+  "settings": {
+    "ITEM_PIPELINES" :{"myspider.pipelines.MongoPipeline": 400,"myspider.pipelines.WanfangPipeline": 300},
+    "MONGO_URI": "mongodb://47.106.173.16:27017",
+    "MONGO_DB": "GeoKG"
+  },
+  "allowed_domains":["wanfangdata.com.cn"],
+  "KEY_WORD": "岭南 传统建筑",
+  "MAX_PAGE": 2
+}
