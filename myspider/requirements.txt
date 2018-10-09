@@ -1,5 +1,2 @@
 scrapy
 pymongo>=3.4.0
-re
-base64
-random
