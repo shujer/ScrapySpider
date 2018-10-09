@@ -27,8 +27,10 @@ def removeUselessValue(array):
 
 class WanfangPipeline(object):
     def process_item(self, item, spider):
-        if item['key_word']:
-            item['key_word'] = removeUselessValue(item['key_word'])
+        if item['c_key_word']:
+            item['c_key_word'] = removeUselessValue(item['c_key_word'])
+        if item['e_key_word']:
+            item['e_key_word'] = removeUselessValue(item['e_key_word'])
         if item['c_author']:
             item['c_author'] = removeUselessValue(item['c_author'])
         if item['e_author']:

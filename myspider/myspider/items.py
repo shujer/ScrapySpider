@@ -18,5 +18,6 @@ class WanfangItem(scrapy.Item):
     e_author = scrapy.Field()
     c_abstract = scrapy.Field()
     e_abstract = scrapy.Field()
-    key_word = scrapy.Field()
+    c_key_word = scrapy.Field()
+    e_key_word = scrapy.Field()
     online_date = scrapy.Field()

@@ -5,9 +5,9 @@
   "settings": {
     "ITEM_PIPELINES" :{"myspider.pipelines.MongoPipeline": 400,"myspider.pipelines.WanfangPipeline": 300},
     "MONGO_URI": "mongodb://47.106.173.16:27017",
-    "MONGO_DB": "GeoKG"
+    "MONGO_DB": "GeoKG",
+    "KEY_WORD": "岭南 传统建筑",
+    "MAX_PAGE": 5
   },
-  "allowed_domains":["wanfangdata.com.cn"],
-  "KEY_WORD": "岭南 传统建筑",
-  "MAX_PAGE": 2
+  "allowed_domains":["wanfangdata.com.cn"]
 }

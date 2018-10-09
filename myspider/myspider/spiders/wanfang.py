@@ -4,17 +4,18 @@ import scrapy
 from scrapy.http import Request
 from myspider.items import WanfangItem
 from myspider.utils import get_config
+from scrapy.utils.project import get_project_settings
+from scrapy.spiders import CrawlSpider, Rule
 
-
-class WanfangSpider(scrapy.Spider):
+class WanfangSpider(CrawlSpider):
     name = 'wanfang'
 
-    def __init__(self, name, *args, **kwargs):
+    def __init__(self, name, key_word, max_page, *args, **kwargs):
         self.base_url = 'http://s.wanfangdata.com.cn/Paper.aspx?'
         config = get_config(name)
         self.config = config
-        self.key_word = config.get('KEY_WORD')
-        self.my_max_page = config.get('MAX_PAGE')
+        self.key_word = key_word
+        self.my_max_page = max_page
         self.allowed_domains = config.get('allowed_domains')
         super(WanfangSpider, self).__init__(*args, **kwargs)
 
@@ -51,15 +52,20 @@ class WanfangSpider(scrapy.Spider):
         c_author = content.xpath('//span[contains(text(),"作者：")]/following-sibling::*[1]/a/text()').extract()
         e_author = content.xpath('//span[contains(text(),"Author")]/following-sibling::*[1]/span/text()').extract()
         key_word = content.xpath('//div[@class="row row-keyword"]/span[@class="text"]//text()').extract()
+        c_key_word = content.xpath('//span[contains(text(),"关键词")]/following-sibling::*[1]//text()').extract()
+        e_key_word = content.xpath('//span[contains(text(),"Keywords")]/following-sibling::*[1]//text()').extract()
         online_date = content.xpath('//span[contains(text(),"在线出版日期：")]/following-sibling::*[1]/text()').extract()
 
+
+        print([c_key_word, e_key_word])
         item['url'] = response.meta['refer']
         item['c_title'] = ''.join(c_title).strip()
         item['e_title'] = ''.join(e_title).strip()
         item['doi'] = ''.join(doi).strip()
         item['c_author'] = [''.join(author).strip() for author in c_author]
         item['e_author'] = [''.join(author).strip() for author in e_author]
-        item['key_word'] = [''.join(word).strip() for word in key_word]
+        item['c_key_word'] = [''.join(word).strip() for word in c_key_word]
+        item['e_key_word'] = [''.join(word).strip() for word in e_key_word]
         item['online_date'] = ''.join(online_date).strip()
         c_abstract_1 = ''.join(c_abstract).strip();
         c_abstract_2 = ''.join(c_abstract_short).strip();
