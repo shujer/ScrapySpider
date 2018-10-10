@@ -1,15 +1,20 @@
+Centos7:
 yum -y update
 yum install -y yum-utils device-mapper-persistent-data lvm2
 yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-yum makecache fast £¨fail: vim /etc/resolv.conf -> nameserver 8.8.8.8£©
+yum makecache fast Â£Â¨fail: vim /etc/resolv.conf -> nameserver 8.8.8.8Â£Â©
 yum install docker-ce -y
 systemctl enable docker
 systemctl start docker
 docker run hello-world
 
 
-mongodb:ifconfig
+Ubuntu16:
 git clone https://github.com/SusieChang/ScrapySpider.git
 cd ScrapySpider
 cd myspider
 docker build -t wanfang:latest
+docker run wanfang
+
+Local:
+python run.py wanfang [-h/--help]
