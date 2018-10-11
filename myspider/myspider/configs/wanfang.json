@@ -7,7 +7,7 @@
     "MONGO_URI": "mongodb://47.106.173.16:27017",
     "MONGO_DB": "GeoKG",
     "KEY_WORD": "岭南 传统建筑",
-    "MAX_PAGE": 5
+    "MAX_PAGE": 2
   },
   "allowed_domains":["wanfangdata.com.cn"]
 }
