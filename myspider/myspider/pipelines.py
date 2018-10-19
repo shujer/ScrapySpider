@@ -8,6 +8,8 @@
 import pymongo
 import re
 from scrapy.exceptions import DropItem
+from langdetect import detect
+from langdetect import detect_langs
 
 def chineseClean(input):
     input = re.sub('\n+', " ", input)
@@ -42,6 +44,13 @@ class WanfangPipeline(object):
         return item
 
 
+class CNKIPipeline(object):
+    def process_item(self, item, spider):
+        if item['key_word']:
+            item['key_word'] = [re.sub(";", "", ky) for ky in item['key_word']]
+        return item
+
+
 class MongoPipeline(object):
     def __init__(self, mongo_uri, mongo_db):
         self.mongo_uri = mongo_uri
@@ -68,5 +77,4 @@ class MongoPipeline(object):
 
     def close_spider(self, spider):
         self.client.close()
-
 

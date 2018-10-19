@@ -4,7 +4,6 @@ from myspider.utils import get_config
 from scrapy.crawler import CrawlerProcess
 import argparse
 
-
 def run():
     """ 输入参数列表：name, keyword, maxpage mongo_uri, mongo_db 可选"""
     arg_settings = {}
@@ -36,7 +35,6 @@ def run():
     process = CrawlerProcess(settings)
     process.crawl(spider, **{'name': name, 'key_word': key_word, 'max_page': max_page})
     process.start()
-
 
 if __name__=='__main__':
     run()

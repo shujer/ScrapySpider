@@ -1,0 +1,21 @@
+{
+  "spider" : "cnki",
+  "website" : "中国知网",
+  "type": "论文/期刊/会议",
+  "settings": {
+    "ITEM_PIPELINES" :{
+      "myspider.pipelines.MongoPipeline": 400,
+      "myspider.pipelines.CNKIPipeline": 300
+    },
+    "DOWNLOADER_MIDDLEWARES":{
+      "myspider.middlewares.RandomUserAgentMiddleware": 401,
+      "myspider.middlewares.ABProxyMiddleware": 1
+    },
+    "COOKIES_ENABLED":"True",
+    "MONGO_URI": "mongodb://47.106.173.16:27017",
+    "MONGO_DB": "GeoKG",
+    "KEY_WORD": "岭南 传统建筑",
+    "MAX_PAGE": 2
+  },
+  "allowed_domains":["cnki.net"]
+}

@@ -5,6 +5,8 @@ from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 from myspider.settings import AB_PROXY_SERVER
 from myspider.user_agent import USER_AGENT
 import base64
+from scrapy.downloadermiddlewares.redirect import RedirectMiddleware
+from scrapy.exceptions import IgnoreRequest
 
 """ 阿布云ip代理配置，包括账号密码 """
 proxyServer = AB_PROXY_SERVER['proxyServer']
@@ -24,6 +26,20 @@ class ABProxyMiddleware(object):
     def process_request(self, request, spider):
         request.meta["proxy"] = proxyServer
         request.headers["Proxy-Authorization"] = proxyAuth
+
+
+class CNKIRedirectMiddleware(RedirectMiddleware):
+    def process_response(self, request, response, spider):
+        if response.status == 302:
+            return response
+        else:
+            allowed_headers = ['text/html; charset=UTF-8', 'text/html; charset=utf-8', 'text/html; charset=UTF-8',
+                               'text/html; charset=utf-8', 'text/html; charset=ISO-8859-1',
+                               'application/xhtml+xml; charset=utf-8']
+            if response.headers['Content-Type'] in allowed_headers:
+                return response
+            else:
+                raise IgnoreRequest
 
 
 class SpiderSpiderMiddleware(object):

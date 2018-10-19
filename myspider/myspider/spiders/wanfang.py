@@ -1,11 +1,7 @@
-# -*- coding: utf-8 -*-
-
-import scrapy
 from scrapy.http import Request
 from myspider.items import WanfangItem
 from myspider.utils import get_config
-from scrapy.utils.project import get_project_settings
-from scrapy.spiders import CrawlSpider, Rule
+from scrapy.spiders import CrawlSpider
 
 class WanfangSpider(CrawlSpider):
     name = 'wanfang'
@@ -67,13 +63,13 @@ class WanfangSpider(CrawlSpider):
         item['c_key_word'] = [''.join(word).strip() for word in c_key_word]
         item['e_key_word'] = [''.join(word).strip() for word in e_key_word]
         item['online_date'] = ''.join(online_date).strip()
-        c_abstract_1 = ''.join(c_abstract).strip();
-        c_abstract_2 = ''.join(c_abstract_short).strip();
+        item['search_word'] = self.key_word
+        c_abstract_1 = ''.join(c_abstract).strip()
+        c_abstract_2 = ''.join(c_abstract_short).strip()
         if c_abstract_1 != "":
             item['c_abstract'] = c_abstract_1
         else:
             item['c_abstract'] = c_abstract_2
 
-        item['e_abstract'] = ''.join(e_abstract).strip();
-
+        item['e_abstract'] = ''.join(e_abstract).strip()
         yield item

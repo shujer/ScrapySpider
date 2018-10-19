@@ -21,3 +21,17 @@ class WanfangItem(scrapy.Item):
     c_key_word = scrapy.Field()
     e_key_word = scrapy.Field()
     online_date = scrapy.Field()
+    search_word = scrapy.Field()
+
+
+class CNKIItem(scrapy.Item):
+    url = scrapy.Field()
+    title = scrapy.Field()
+    doi = scrapy.Field()
+    author = scrapy.Field()
+    abstract = scrapy.Field()
+    key_word = scrapy.Field()
+    organization = scrapy.Field()
+    online_date = scrapy.Field()
+    search_word = scrapy.Field()
+    paper_type = scrapy.Field()
