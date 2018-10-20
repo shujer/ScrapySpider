@@ -95,7 +95,6 @@ class CNKISpider(CrawlSpider):
         max_page = int(page_link.split("/")[1])
         for page_num in range(2, max_page+1):
             if page_num < self.my_max_page:
-                half_url = response.xpath('//div[@class="TitleLeftCell"]/a[contains(text(),"下一页")]/@href').extract_first()
                 data = {
                     "curpage": page_num,
                     "RecordsPerPage": 20,
