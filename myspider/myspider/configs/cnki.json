@@ -7,13 +7,9 @@
       "myspider.pipelines.MongoPipeline": 400,
       "myspider.pipelines.CNKIPipeline": 300
     },
-    "DOWNLOADER_MIDDLEWARES":{
-      "myspider.middlewares.RandomUserAgentMiddleware": 401,
-      "myspider.middlewares.ABProxyMiddleware": 1
-    },
     "COOKIES_ENABLED":"True",
-    "MONGO_URI": "mongodb://47.106.173.16:27017",
-    "MONGO_DB": "GeoKG",
+    "MONGO_URI": "mongodb://sysu:sysu2018@ds239703.mlab.com:39703/human-geo",
+    "MONGO_DB": "human-geo",
     "KEY_WORD": "岭南 传统建筑",
     "MAX_PAGE": 2
   },

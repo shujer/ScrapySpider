@@ -10,9 +10,11 @@ from urllib.error import HTTPError
 from myspider.user_agent import USER_AGENT
 import random
 from http import cookiejar
+from scrapy.http import FormRequest
 
 def check_redirect(url, ref):
     try:
+        print(url, ref)
         cj = cookiejar.CookieJar()
         opener = request.build_opener(request.HTTPCookieProcessor(cj))
         request.install_opener(opener)
@@ -49,18 +51,17 @@ class CNKISpider(CrawlSpider):
 
     def start_requests(self):
         data = {
-            "formDefaultResult": "",
-            "PageName": "ASP.brief_default_result_aspx",
-            "DbCatalog": "中国学术文献网络出版总库",
-            "ConfigFile": "SCDBINDEX.xml",
             "txt_1_sel": "SU$%=|",
             "txt_1_value1": self.key_word,
-            "DbPrefix": "SCDB",
-            "db_opt": "CJFQ,CDFD,CMFD,CPFD,IPFD,CCND,CJRF,CJFN,CCJD",
-            "singleDB": "SCDB",
-            "db_codes": "CJFQ,CDFD,CMFD,CPFD,IPFD,CCND,CJRF,CJFN,CCJD",
-            "his": 0,
             "txt_1_special1": "%",
+            "PageName": "ASP.brief_default_result_aspx",
+            "ConfigFile": "SCDBINDEX.xml",
+            "dbPrefix": "CJFQ",
+            "db_opt": "CJFQ",
+            "singleDB": "CJFQ",
+            "db_codes": "CJFQ",
+            "his": 0,
+            "formDefaultResult": "",
             "ua": "1.11",
             "__": time.strftime('%a %b %d %Y %H:%M:%S') + ' GMT+0800 (中国标准时间)'
         }
@@ -73,13 +74,14 @@ class CNKISpider(CrawlSpider):
     def parse(self, response):
         data = {
             'pagename': 'ASP.brief_default_result_aspx',
-            'dbPrefix': 'SCDB',
-            'dbCatalog': '中国学术文献网络出版总库',
+            'dbPrefix': 'CJFQ',
+            'dbCatalog': '中国学术期刊网络出版总库',
             'ConfigFile': 'SCDBINDEX.xml',
             'research': 'off',
             't': int(time.time()),
             'keyValue': self.key_word,
-            'S': '1'
+            'S': '1',
+            'sorttype': ""
         }
         query_string = parse.urlencode(data)
         url = self.list_url + '?' + query_string
@@ -91,10 +93,12 @@ class CNKISpider(CrawlSpider):
     def parse_list_first(self, response):
         page_link = response.xpath('//span[@class="countPageMark"]/text()').extract_first()
         self.cur_referer = response.request.url
-        # self.parse_paper_link(response)
-        max_page = int(page_link.split("/")[1])
-        for page_num in range(2, max_page+1):
-            if page_num < self.my_max_page:
+        if not page_link:
+            max_page = 0
+        else:
+            max_page = int(page_link.split("/")[1])
+        for page_num in range(1, max_page+1):
+            if page_num <= self.my_max_page:
                 data = {
                     "curpage": page_num,
                     "RecordsPerPage": 20,
@@ -102,7 +106,7 @@ class CNKISpider(CrawlSpider):
                     "ID":"",
                     "turnpage": 1,
                     "tpagemode": "L",
-                    "dbPrefix": "SCDB",
+                    "dbPrefix": "CJFQ",
                     "Fields":"",
                     "DisplayMode": "listmode",
                     "PageName": "ASP.brief_default_result_aspx",
@@ -115,24 +119,22 @@ class CNKISpider(CrawlSpider):
                               headers={"Referer": self.cur_referer},
                               callback=self.parse_paper_link)
                 self.cur_referer = url
-        self.parse_paper_link(response)
 
     def parse_paper_link(self, response):
         refer = response.request.url
         tr_node = response.xpath("//tr[@bgcolor='#f6f7fb']|//tr[@bgcolor='#ffffff']")
         for item in tr_node:
-            paper_link = item.xpath("td/a[@class='fz14']/@href").extract()
+            paper_link = item.xpath("td/a[@class='fz14']/@href").extract_first()
             paper_pub_date = ''.join(item.xpath("td[5]/text()").extract()).strip()
-            paper_type = ''.join(item.xpath("td[6]/text()").extract()).strip()
-            for href in paper_link:
-                flag_url = check_redirect(self.base_url+href, refer)
-                if flag_url:
-                    yield Request(url=flag_url,
-                                  headers={"Referer": refer},
-                                  callback=self.parse_item,
-                                  meta={"cnkiitem": {"paper_pub_date": paper_pub_date, "paper_type": paper_type}})
-                else:
+            year = int(paper_pub_date[0:4])
+            month = int(paper_pub_date[5:7])
+            if 2006 < year <= 2018:
+                if year == 2018 and month > 9:
                     continue
+                yield Request(url=self.base_url + paper_link,
+                              headers={"Referer": refer},
+                              callback=self.parse_item,
+                              meta={"enable_redirect": True, 'dont_redirect': False, "cnkiitem": {"paper_pub_date": paper_pub_date}})
 
     def parse_item(self, response):
         item = CNKIItem()
@@ -143,7 +145,7 @@ class CNKISpider(CrawlSpider):
         abstract = response.xpath('//*[@id="ChDivSummary"]/text()').extract()
         keywords = response.xpath('//*[@id="catalog_KEYWORD"]/following-sibling::*/text()').extract()
         item['online_date'] = response.meta["cnkiitem"]["paper_pub_date"]
-        item['paper_type'] = response.meta["cnkiitem"]["paper_type"]
+        item['paper_type'] = "期刊"
         item['key_word'] = [ky.strip() for ky in keywords]
         item['abstract'] = ''.join(abstract).strip()
         item['url'] = url
