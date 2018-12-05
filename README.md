@@ -30,4 +30,4 @@ $ python run.py cnki -k "地理" -m 10 #万方
 $ python run.py wapcnki -k "地理" -m 10 #手机知网
 ```
 
-补充：技术博客见[爬取中国知网CNKI的遇到的坑与技术总结](https://www.ephemeron.top/2018/10/20/爬取中国知网CNKI的遇到的坑与技术总结)
+补充：技术博客见[爬取中国知网CNKI的遇到的坑与技术总结](https://juejin.im/post/5c076c88f265da61223a1f9a)
