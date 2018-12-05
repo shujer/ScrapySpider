@@ -21,5 +21,13 @@
 - 文章链接
 - 搜索关键词
 
+3. 运行命令
+```
+$ cd ScrapySpider/myspider
+$ python run.py --help
+$ python run.py cnki -k "地理" -m 10 #知网
+$ python run.py cnki -k "地理" -m 10 #万方
+$ python run.py wapcnki -k "地理" -m 10 #手机知网
+```
 
 补充：技术博客见[爬取中国知网CNKI的遇到的坑与技术总结](https://www.ephemeron.top/2018/10/20/爬取中国知网CNKI的遇到的坑与技术总结)
