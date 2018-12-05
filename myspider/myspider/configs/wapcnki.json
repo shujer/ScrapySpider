@@ -1,16 +1,16 @@
 {
-  "spider" : "cnki",
+  "spider" : "wapcnki",
   "website" : "中国知网",
   "type": "论文/期刊/会议",
   "settings": {
     "ITEM_PIPELINES" :{
       "myspider.pipelines.MongoPipeline": 400,
-      "myspider.pipelines.CNKIPipeline": 300
+      "myspider.pipelines.WAPCNKIPipeline": 300
     },
     "COOKIES_ENABLED":"True",
     "MONGO_URI": "mongodb://localhost:27017/geo",
     "MONGO_DB": "geo",
-    "KEY_WORD": "岭南 传统建筑",
+    "KEY_WORD": "地理",
     "MAX_PAGE": 10000
   },
   "allowed_domains":["cnki.net"]

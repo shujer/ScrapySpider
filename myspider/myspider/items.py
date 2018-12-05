@@ -35,3 +35,16 @@ class CNKIItem(scrapy.Item):
     online_date = scrapy.Field()
     search_word = scrapy.Field()
     paper_type = scrapy.Field()
+
+
+class WAPCNKIItem(scrapy.Item):
+    url = scrapy.Field()
+    title = scrapy.Field()
+    author = scrapy.Field()
+    abstract = scrapy.Field()
+    key_word = scrapy.Field()
+    organization = scrapy.Field()
+    online_date = scrapy.Field()
+    search_word = scrapy.Field()
+    paper_type = scrapy.Field()
+    region = scrapy.Field()

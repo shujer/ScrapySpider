@@ -81,13 +81,13 @@ class CNKISpider(CrawlSpider):
             't': int(time.time()),
             'keyValue': self.key_word,
             'S': '1',
-            'sorttype': ""
+            "recordsperpage": 50,
+            # 'sorttype': ""
         }
         query_string = parse.urlencode(data)
         url = self.list_url + '?' + query_string
         yield Request(url=url,
                       headers={"Referer": self.cur_referer},
-                      meta={"ref": url},
                       callback=self.parse_list_first)
 
     def parse_list_first(self, response):
@@ -97,11 +97,12 @@ class CNKISpider(CrawlSpider):
             max_page = 0
         else:
             max_page = int(page_link.split("/")[1])
+            print('total page: ' + str(max_page))
         for page_num in range(1, max_page+1):
             if page_num <= self.my_max_page:
                 data = {
                     "curpage": page_num,
-                    "RecordsPerPage": 20,
+                    "RecordsPerPage": 50,
                     "QueryID": 0,
                     "ID":"",
                     "turnpage": 1,
@@ -117,6 +118,7 @@ class CNKISpider(CrawlSpider):
                 print("prepare to crawl page:" + url)
                 yield Request(url=url,
                               headers={"Referer": self.cur_referer},
+                              meta={'cookiejar': page_num},
                               callback=self.parse_paper_link)
                 self.cur_referer = url
 
@@ -134,7 +136,7 @@ class CNKISpider(CrawlSpider):
                 yield Request(url=self.base_url + paper_link,
                               headers={"Referer": refer},
                               callback=self.parse_item,
-                              meta={"enable_redirect": True, 'dont_redirect': False, "cnkiitem": {"paper_pub_date": paper_pub_date}})
+                              meta={'cookiejar':response.meta['cookiejar'],"enable_redirect": True, 'dont_redirect': False, "cnkiitem": {"paper_pub_date": paper_pub_date}})
 
     def parse_item(self, response):
         item = CNKIItem()

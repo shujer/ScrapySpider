@@ -48,8 +48,16 @@ class CNKIPipeline(object):
     def process_item(self, item, spider):
         if item['key_word']:
             item['key_word'] = [re.sub(";", "", ky) for ky in item['key_word']]
+        if len(item['key_word']) == 0 and item['abstract'] == "" and len(item['author']) == 0:
+            raise DropItem("useless item")
         return item
 
+
+class WAPCNKIPipeline(object):
+    def process_item(self, item, spider):
+        if item['organization']:
+            item['organization'] = [re.sub("\n+", "", og) for og in item["organization"]]
+        return item
 
 class MongoPipeline(object):
     def __init__(self, mongo_uri, mongo_db):
