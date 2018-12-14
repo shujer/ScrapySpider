@@ -46,7 +46,6 @@ class CNKISpider(CrawlSpider):
         self.config = config
         self.key_word = key_word
         self.my_max_page = max_page
-        self.my_min_page = min_page
         self.allowed_domains = config.get('allowed_domains')
         super(CNKISpider, self).__init__(*args, **kwargs)
 
@@ -69,7 +68,7 @@ class CNKISpider(CrawlSpider):
         query_string = parse.urlencode(data)
         yield Request(url=self.home_url+query_string,
                       headers={"Referer": self.cur_referer},
-                      cookies={CookieJar: self.my_min_page},
+                      cookies={CookieJar: 1},
                       dont_filter=True,
                       callback=self.parse)
 
@@ -100,12 +99,12 @@ class CNKISpider(CrawlSpider):
         else:
             max_page = int(page_link.split("/")[1])
             print('total page: ' + str(max_page))
-        for page_num in range(self.my_min_page, self.my_max_page+1):
-            if page_num <= max_page:
+        for page_num in range(1, max_page):
+            if page_num <= self.my_max_page:
                 data = {
                     "curpage": page_num,
                     "RecordsPerPage": 20,
-                    "QueryID": 0,
+                    "QueryID": page_num,
                     "ID":"",
                     "turnpage": 1,
                     "tpagemode": "L",
@@ -122,6 +121,18 @@ class CNKISpider(CrawlSpider):
                               headers={"Referer": self.cur_referer},
                               callback=self.parse_paper_link)
                 self.cur_referer = url
+                data = {
+                    "dbprefix": "CJFQ",
+                    "q": page_num,
+                    "c": (page_num-1)*60 + 1,
+                    "l": 20,
+                    "__": time.strftime('%a %b %d %Y %H:%M:%S') + ' GMT+0800 (中国标准时间)'
+                }
+                query_string = parse.urlencode(data)
+                Request(url="http://kns.cnki.net/kns/request/RightValid.ashx?"+query_string,
+                              headers={"Referer": self.cur_referer},
+                              cookies={CookieJar: 1},
+                              dont_filter=True)
 
     def parse_paper_link(self, response):
         refer = response.request.url
