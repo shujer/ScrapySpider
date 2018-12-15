@@ -59,3 +59,5 @@ python run.py wapcnki -k "地理" -m 30000
 python run.py wanfang -k "地理" -m 30000
 可选：
 -u "your mongodb_uri" -d "your mongodb dbname"
+3. m值的确定，可以打开网页，比如http://wap.cnki.net/touch/web/后，筛选关键词和搜索条件，看总共得到多少条结果/每页条数，或者直接定一个很大的数
+4. 知网是限定了近十年的数据和核心期刊，要修改需要改wapcnki.py中myFormData的starttime_sc，endtime_sc和articletype
