@@ -1,66 +1,61 @@
-﻿Centos7/docker:
-yum -y update
-yum install -y yum-utils device-mapper-persistent-data lvm2
-yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-yum makecache fast £¨fail: vim /etc/resolv.conf -> nameserver 8.8.8.8
-yum install docker-ce -y
-systemctl enable docker
-systemctl start docker
-docker run hello-world
-
-
+﻿一、 环境配置
 Ubuntu16:
 1. 环境配置：
 sudo apt-get install build-essential python3-dev libssl-dev libffi-dev libxml2 libxml2-dev libxslt1-dev zlib1g-dev
 sudo apt install python3-pip
 pip3 install Scrapy
-2. 运行
-cd ScrapySpider
-cd myspider
-python run.py --help
+pip3 install pymongo
 
 Windows:
 补充：打开命令行的方法：windows键+R, 输出cmd; 或直接菜单搜索输入运行
 
 方法一：安装Anaconda
-1. 从https://www.anaconda.com/download/安装最新python3版本(没有科学上网可能下载很慢)，
-也可以从我的百度网盘下载，链接：https://pan.baidu.com/s/1Nd9g7KMpsLwaM6HS247fMA 密码：f3w5
-2. 直接打开anaconda prompt,输入：conda install scrapy，环境配置成功
+1. 从https://www.anaconda.com/download/安装最新python3版本(可能下载很慢)，
+也可以从我的百度网盘下载，
+链接：https://pan.baidu.com/s/1iYW1wcvQVbGwj2gXsHGTbQ 
+提取码：4z8s 
+2. 安装后anaconda后，直接打开anaconda prompt(右键管理员命令运行),输入：conda install scrapy，环境配置成功
 3. pip install pymongo
-4. 数据库配置
-5. 可以运行啦:
-cd ScrapySpider/myspider
-python run.py --help
-e.g.
-python run.py cnki -k "人文地理" -m 10
 
 方法二：
 1. 安装软件Python3.配置系统环境变量(网上有教程);
 2. 安装python3后打开命令行输入以下命令
-- pip install wheel 
+- pip install wheel
 - 打开https://www.lfd.uci.edu/~gohlke/pythonlibs/#twisted 找到我们安装的Python对应的包，
 比如python3.6选择 Twisted‑18.9.0‑cp36‑cp36m‑win_amd64.whl；下载到本地后，打开到该路径，输入以下命令：
 pip install Twisted‑18.9.0‑cp36‑cp36m‑win_amd64.whl
 - pip install pywin32
 - pip install lxml Scrapy pymongo
-3. 数据库配置
-4. 如果运行时报错可能是少安装了某些包，根据命令安装即可
-python run.py wanfang [-h/--help]
+
+补充：提示缺少哪些包，直接按提示安装即可
 
 
-数据库配置：
-已写好的代码中使用了免费的云数据库，可以用数据库可视工具Robo 3T访问：
-connection-> address: ds239703.mlab.com  39703
-authentication -> database: human-geo   username: sysu   password: sysu2018
-
-
-如果要将数据存在本地可按以下操作：
-1. 安装数据库，直接官网下载https://www.mongodb.com/到本地路径比如PathA,
+二、数据库配置
+1. 安装
+方法一：本地数据库
+① 安装数据库，直接官网下载https://www.mongodb.com/到本地路径比如PathA,
 运行前，在命令行打开到路径PathA,输入：
 mongod --dbpath PathB （PathB为你存放数据库的位置，最好两个路径中不要有中文）
-2. 修改config/wanfang.json的配置，比如：
+② 修改config/wanfang.json的配置，比如：
 - "MONGO_URI"："mongodb://localhost:27017"
 - MONGO_DB为自己命名的数据库名称
 - KEY_WORD和MAX_PAGE也可以直接修改
 
+方法二：远程数据库
+到 https://mlab.com/ 注册一个账号和一个免费数据库，复制得到的mongo_url修改config
 
+2. 查看
+安装robo3T,修改connection，如果有密码修改authentication
+
+
+三、运行(数据库启动后)
+1. 打开命令行的方法：windows键+R, 输出cmd; 或直接菜单搜索输入运行
+$ cd E:/你的代码路径/ScrapySpider/myspider
+$ E:
+2. 
+中国知网：
+python run.py wapcnki -k "地理" -m 30000
+万方数据库：
+python run.py wanfang -k "地理" -m 30000
+可选：
+-u "your mongodb_uri" -d "your mongodb dbname"
