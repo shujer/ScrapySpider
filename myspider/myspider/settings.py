@@ -29,8 +29,8 @@ DOWNLOADER_MIDDLEWARES = {
 
 AB_PROXY_SERVER = {
     'proxyServer': "http://http-dyn.abuyun.com:9020",
-    'proxyUser': "HN65ST45CP1923YD",
-    'proxyPass': "8E2E9CC8C58F0206"
+    'proxyUser': "xxxxxxxxxxxxxxxx",
+    'proxyPass': "xxxxxxxxxxxxxxxx"
 }
 # Configure item pipelines
 # ITEM_PIPELINES = {
