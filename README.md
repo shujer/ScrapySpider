@@ -26,7 +26,7 @@
 $ cd ScrapySpider/myspider
 $ python run.py --help
 $ python run.py cnki -k "地理" -m 10 #知网
-$ python run.py cnki -k "地理" -m 10 #万方
+$ python run.py wanfang -k "地理" -m 10 #万方
 $ python run.py wapcnki -k "地理" -m 10 #手机知网
 ```
 
